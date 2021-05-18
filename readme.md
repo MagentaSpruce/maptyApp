@@ -27,7 +27,6 @@ if (navigator.geolocation)
     function (position) {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
-      console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
       const map = L.map('map').setView([latitude, longitude], 13);
 
@@ -50,7 +49,6 @@ if (navigator.geolocation)
 To display a marker on the map exactly where a user clicks then an event handler is added to the map. The leaflet library map.on() method is used to add the event listener. Leaflet methods are also called on the .popup to style and appoint the behavior of the marker popups. These methods and more are found in the leaflet documentation.
 ```JavaScript
       map.on('click', mapEvent => {
-        console.log(mapEvent);
         const { lat, lng } = mapEvent.latlng;
         
         L.marker([lat, lng])
@@ -81,7 +79,6 @@ Whenever a user clicks on the map, the workout form should be displayed with the
       
       form.addEventListener('submit', e => {
   e.preventDefault();
-  console.log(mapEvent);
   const { lat, lng } = mapEvent.latlng;
   L.marker([lat, lng])
     .addTo(map)
@@ -209,7 +206,6 @@ To do this the newWorkout() function inside of the App class is added on to as w
 
     //Add new object to workout array
     this.#workouts.push(workout);
-    console.log(workout);
 
     //Render workout on map as marker
     this._renderWorkoutMarker(workout);
@@ -307,7 +303,6 @@ In order to move to a marker on a list item click event the moveToPopup() functi
 ```JavaScript
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
-    console.log(workoutEl);
     if (!workoutEl) return;
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
@@ -344,6 +339,14 @@ To reload old workouts stored inside of local storage and then render them to th
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
+  }
+```
+
+To remove items from local storage the reset() function was constructed.
+```JavaScript
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 ```
 
