@@ -78,10 +78,16 @@ class App {
   #workouts = [];
 
   constructor() {
+    //Get user position
     this._getPosition();
-    form.addEventListener('submit', this._newWorkout.bind(this));
 
+    //Get data from local storage
+    this._getLocalStorage();
+
+    //Attach event handlers
+    form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
+    containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
 
   _getPosition() {
@@ -110,6 +116,10 @@ class App {
     }).addTo(this.#map);
     //Handling map clicks
     this.#map.on('click', this._showForm.bind(this));
+
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -187,6 +197,8 @@ class App {
     this._renderWorkout(workout);
     //Hide form + clear input fields
     this._hideForm();
+    //Set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -230,7 +242,8 @@ class App {
       html += `          
     <div class="workout__details">
       <span class="workout__icon">⚡️</span>
-      <span class="workout__value">${workout.speed.toFixed(1)}</span>
+      <span class="workout__value">${workout.speed}</span>
+
       <span class="workout__unit">km/h</span>
     </div>
     <div class="workout__details">
@@ -255,10 +268,42 @@ class App {
 
     form.insertAdjacentHTML('afterend', html);
   }
+
+  _moveToPopup(e) {
+    const workoutEl = e.target.closest('.workout');
+    console.log(workoutEl);
+    if (!workoutEl) return;
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
+    );
+    console.log(workout);
+    this.#map.setView(workout.coords, 13, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+
+    if (!data) return;
+    //sets workout array to workouts in LS(if any)
+    this.#workouts = data;
+    //renders workouts
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
 }
 
 const app = new App();
-
+//      ${workout.speed.toFixed(1)}
 // class Workout {
 //   date = new Date();
 //   id = Date.now() + ''.slice(-10);
