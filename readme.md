@@ -1,10 +1,8 @@
 #Mapty Workout Application
 
-This project was built following the instructions of Jonas Schedtmann, a Udemy JavaScript course instructor. It simulates a workout application where workouts and their data can be pinned to an interactive map by way of a 3rd party API(). 
+This project was built following the instructions of Jonas Schedtmann, a Udemy JavaScript course instructor. It simulates a workout application where workouts and their data can be pinned to an interactive map by way of a 3rd party library. 
 
 There are 3 flowcharts provided with this project which provide an abstract look at the overall build and functionality. These can all be found in the files list.
-
-There are four accounts that can be logged-in/out with different pins and usernames given here:
 
 Constructing this project has helped me to learn and practice better the following:
 1) Project planning
